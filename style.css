@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+:root {
+  --background: rgb(3, 3, 17);
+  --primary: rgba(255, 255, 255,.8);
+  --primary-glow: rgb(255, 255, 255);
+}
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: var(--background);
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
+
+.input {
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.benchmark-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
+
+.benchmark {
+  background-color: var(--primary);
+  color: var(--background);
+  text-align: center;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.benchmark:hover {
+  background-color: var(--primary-glow);
+  transform: translateY(-10px);
+  transition: all .2s ease;
+}
+
+.benchmark.wasm {
+  box-shadow: 0px 0px 40px rgba(255, 255, 127);
+}
+
+.benchmark.wasmworker {
+  box-shadow: 0px 0px 40px rgba(127, 255, 225);
+}
+.benchmark.js {
+  box-shadow: 0px 0px 40px rgb(255, 127, 127);
+}
+
+.benchmark .title {
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+.benchmark .value {
+  font-size: 36px;
+}
