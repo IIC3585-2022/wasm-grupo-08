@@ -1,4 +1,4 @@
-importScripts('main_sync.js');
+importScripts('main.js');
 
 this.onmessage = (m) => {
   const randomArray = m.data;
