@@ -1,4 +1,3 @@
-#include <emscripten/bind.h>
 #include <math.h>
 #include <cstdint>
 #include <vector>
@@ -11,7 +10,7 @@ typedef uint32_t u32;
 
 
 bool check_sums(const u32 *numbers, u32 size, u32 num_partitions, vector<u32> &asignment) {
-  auto sums = vector<u32>{num_partitions, 0};
+  vector<u32> sums(num_partitions, 0);
 
   for (u32 i = 0; i < size; i++) {
     sums[asignment[i]] += numbers[i];
@@ -45,7 +44,7 @@ extern "C" bool partition(u32 *numbers, u32 size, u32 num_partitions) {
   if (num_partitions < 1) return false;
   if (size < num_partitions) return false;
 
-  auto asignment = vector<u32>{size};
+  vector<u32> asignment(size, 0);
 
   cout << "numbers: ";
   for (u32 i = 0; i < size; i++) {
@@ -57,4 +56,13 @@ extern "C" bool partition(u32 *numbers, u32 size, u32 num_partitions) {
   cout << std::endl;
 
   return partition_rec(numbers, size, num_partitions, asignment, 0);
+}
+
+
+
+// Used for testing, does not not need to be exported.
+int main() {
+  u32 numbers[]{2, 2, 2};
+  auto result = partition(numbers, 3, 3);
+  cout << result << "\n";
 }
