@@ -1,0 +1,6 @@
+define hook-quit
+    set confirm off
+end
+
+break 44
+run
