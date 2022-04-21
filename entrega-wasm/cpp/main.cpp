@@ -9,6 +9,7 @@ using std::cout;
 typedef uint32_t u32;
 
 
+// Check if the partitions have the same sum.
 bool check_sums(const u32 *numbers, u32 size, u32 num_partitions, vector<u32> &asignment) {
   vector<u32> sums(num_partitions, 0);
 
@@ -24,7 +25,7 @@ bool check_sums(const u32 *numbers, u32 size, u32 num_partitions, vector<u32> &a
   return true;
 }
 
-
+// Asign numbers to different partitions recursively.
 bool partition_rec(const u32 *numbers, u32 size, u32 num_partitions,vector<u32> &asignment, u32 position) {
   // Base case
   if (position == size) {
@@ -40,13 +41,12 @@ bool partition_rec(const u32 *numbers, u32 size, u32 num_partitions,vector<u32> 
 }
 
 
+// Check if the numbers can be partitioned into <num_partitions> sets with equal sum.
 extern "C" bool partition(u32 *numbers, u32 size, u32 num_partitions) {
   if (num_partitions < 1) return false;
   if (size < num_partitions) return false;
 
-  vector<u32> asignment(size, 0);
-
-  cout << "numbers: ";
+  cout << "C++ Numbers: ";
   for (u32 i = 0; i < size; i++) {
     cout << numbers[i];
     if (i < size-1) {
@@ -55,12 +55,12 @@ extern "C" bool partition(u32 *numbers, u32 size, u32 num_partitions) {
   }
   cout << std::endl;
 
+  vector<u32> asignment(size, 0);
   return partition_rec(numbers, size, num_partitions, asignment, 0);
 }
 
 
-
-// Used for testing, does not not need to be exported.
+// Used for debugging, does not not need to be exported.
 int main() {
   u32 numbers[]{2, 2, 2};
   auto result = partition(numbers, 3, 3);

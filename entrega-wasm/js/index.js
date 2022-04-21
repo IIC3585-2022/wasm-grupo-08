@@ -1,11 +1,4 @@
-const expTimeJS = (n) => {
-  let result = 0;
-  const limit = Math.pow(2, n);
-  for (let i = 0; i < limit; i++) result++;
-  return result;
-};
-
-
+// Check if the partitions have the same sum.
 function check_sums(numbers, size, num_partitions, asignment) {
   let sums = new Array(num_partitions).fill(0);
 
@@ -24,6 +17,8 @@ function check_sums(numbers, size, num_partitions, asignment) {
 }
 
 
+
+// Asign numbers to different partitions recursively.
 function partition_rec(numbers, size, num_partitions, asignment, position) {
   // Base case
   if (position === size) {
@@ -39,20 +34,31 @@ function partition_rec(numbers, size, num_partitions, asignment, position) {
 }
 
 
+// Check if the numbers can be partitioned into <num_partitions> sets with equal sum.
 function partition(numbers, size, num_partitions) {
   if (num_partitions < 1) return false;
   if (size < num_partitions) return false;
 
-  let asignment = new Array(size);
+  console.log(`JS Numbers: ${numbers}`);
+
+  const asignment = new Array(size);
   return partition_rec(numbers, size, num_partitions, asignment, 0);
 }
 
 
+let _randomArray;
+let _length = 0;
+const MIN = 1;
+const MAX = 1000;
+
+// Generate random array.
 const getBenchmarkValue = () => {
-  const length = document.getElementById('benchmark-value').value;
-  const min = 1;
-  const max = 1000;
-  return Uint32Array.from({length}, () => Math.floor(Math.random() * (max - min) + min))
+  const newLength = document.getElementById('benchmark-value').value;
+  if (newLength !== _length) {
+    _length = newLength
+    _randomArray = Uint32Array.from({length:_length}, () => Math.floor(Math.random() * (MAX - MIN) + MIN))
+  }
+  return _randomArray
 };
 
 
@@ -64,11 +70,12 @@ const replaceValue = (which, value) => {
 
 
 document.getElementById('js').onclick = () => {
-  let randomArray = getBenchmarkValue();
+  const randomArray = getBenchmarkValue();
   const t0 = Date.now();
-  randomArray = Uint32Array.from([2, 2, 2]);
-  console.log(randomArray)
-  console.log(partition(randomArray, randomArray.length, 3));
+
+  const result = partition(randomArray, randomArray.length, 3);
+  console.log(`Result: ${result}`);
+
   const t1 = Date.now();
   replaceValue('js', (t1 - t0) / 1000);
 };
@@ -77,18 +84,19 @@ document.getElementById('js').onclick = () => {
 Module.onRuntimeInitialized = () => {
   const { partition } = Module;
   document.getElementById('wasm').onclick = () => {
-    let randomArray = getBenchmarkValue();
+    const randomArray = getBenchmarkValue();
     const t0 = Date.now();
-    randomArray = Uint32Array.from([2, 2, 2]);
+
     const ptr = Module._malloc(randomArray.byteLength);
     Module.HEAPU32.set(randomArray, ptr>>2);
 
-    result = Module.ccall("partition", "boolean",
+    const result = Module.ccall("partition", "boolean",
       ["number", "number", "number"],
       [ptr, randomArray.length, 3]);
 
-    console.log(result);
     Module._free(ptr);
+    console.log(`Result: ${result}`);
+
     const t1 = Date.now();
     replaceValue('wasm', (t1 - t0) / 1000);
   };
